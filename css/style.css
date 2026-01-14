@@ -107,7 +107,7 @@ button {
 }
 
 .logo img {
-  height: 50px;
+  height: 36px;
   width: auto;
 }
 
@@ -202,14 +202,31 @@ button {
    ===================================================== */
 .hero {
   margin-top: var(--header-height);
-  height: 500px;
-  background: linear-gradient(135deg, rgba(30, 136, 210, 0.9), rgba(28, 89, 162, 0.9)),
-              url('../images/hero-bg.jpg') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  position: relative;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 0 20px;
+  font-size: 48px;
+  font-weight: 700;
   color: var(--white);
+  text-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
 }
 
 .hero h1 {
@@ -1069,10 +1086,11 @@ button {
   }
   
   /* Hero */
-  .hero {
-    height: 350px;
+  .hero-text {
+    bottom: 20px;
+    font-size: 26px;
   }
-  
+
   .hero h1 {
     font-size: 26px;
     padding: 0 20px;
@@ -1231,6 +1249,31 @@ button {
 }
 
 /* =====================================================
+   Main Banner Section
+   ===================================================== */
+.main-banner-section {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.main-banner-section a {
+  display: inline-block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.main-banner-section a:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+.main-banner {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* =====================================================
    Banner Section (関連会社リンク)
    ===================================================== */
 .banner-section {
@@ -1269,6 +1312,79 @@ button {
 
   .banner-links img {
     max-height: 50px;
+  }
+}
+
+/* =====================================================
+   Page Layout with Sidebar
+   ===================================================== */
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 40px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.page-main {
+  min-width: 0;
+}
+
+.page-sidebar {
+  padding-top: 40px;
+}
+
+.sidebar-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-banner a {
+  display: block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sidebar-banner a:hover {
+  transform: translateY(-3px);
+  opacity: 0.8;
+}
+
+.sidebar-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 968px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .page-sidebar {
+    padding-top: 0;
+  }
+
+  .sidebar-banner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .sidebar-banner a {
+    width: calc(50% - 10px);
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-banner a {
+    width: 100%;
+    max-width: 250px;
   }
 }
 
