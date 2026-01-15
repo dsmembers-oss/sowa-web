@@ -1355,13 +1355,8 @@ button {
 
 .sidebar-banner a {
   display: block;
-  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.sidebar-banner a:hover {
-  transform: translateY(-3px);
-  opacity: 0.8;
-}
 
 .sidebar-banner img {
   width: 100%;
