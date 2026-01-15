@@ -1276,12 +1276,6 @@ button {
 
 .main-banner-section a {
   display: inline-block;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.main-banner-section a:hover {
-  transform: translateY(-3px);
-  opacity: 0.9;
 }
 
 .main-banner {
