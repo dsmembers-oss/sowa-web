@@ -37,7 +37,7 @@ html {
 body {
   font-family: var(--font-ja);
   font-size: 16px;
-  line-height: 1.8;
+  line-height: 1.6;
   color: var(--text);
   background-color: var(--white);
   -webkit-font-smoothing: antialiased;
@@ -149,6 +149,24 @@ button {
   color: var(--primary);
 }
 
+/* Home icon */
+.nav-menu li a.nav-home::before {
+  content: '';
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666666'%3E%3Cpath d='M12 2.5L1 12h3v9h7v-6h2v6h7v-9h3L12 2.5z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: -2px;
+}
+
+/* Home icon - current page (blue) */
+.nav-menu li a.nav-home.current::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e88d2'%3E%3Cpath d='M12 2.5L1 12h3v9h7v-6h2v6h7v-9h3L12 2.5z'/%3E%3C/svg%3E");
+}
+
 /* Hamburger Menu Button */
 .menu-btn {
   display: none;
@@ -241,23 +259,45 @@ button {
   margin-top: var(--header-height);
   height: 200px;
   background: linear-gradient(135deg, rgba(30, 136, 210, 0.9), rgba(28, 89, 162, 0.9));
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: var(--white);
 }
 
 .page-header h1 {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
   font-size: 32px;
   font-weight: 700;
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.page-header--works {
+  background: url('../images/page-header-works.jpg') center/cover no-repeat;
+}
+
+.page-header--example {
+  background: url('../images/page-header-example.jpg') center/cover no-repeat;
+}
+
+.page-header--company {
+  background: url('../images/page-header-company.jpg') center/cover no-repeat;
+}
+
+.page-header--contact {
+  background: url('../images/page-header-contact.jpg') center/cover no-repeat;
 }
 
 /* =====================================================
    Section Styles
    ===================================================== */
 .section {
-  padding: 80px 0;
+  padding: 50px 0;
 }
 
 .section--bg {
@@ -267,10 +307,10 @@ button {
 /* Section Title (English) */
 .section-title {
   font-family: var(--font-en);
-  font-size: 44px;
+  font-size: 40px;
   font-weight: 400;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   color: var(--text);
 }
 
@@ -282,8 +322,8 @@ button {
   border-radius: 6px;
   font-size: 18px;
   font-weight: 600;
-  display: inline-block;
-  margin-bottom: 20px;
+  display: block;
+  margin-bottom: 15px;
 }
 
 /* =====================================================
@@ -326,7 +366,7 @@ button {
    Tabs
    ===================================================== */
 .tabs {
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 .tab-nav {
@@ -352,7 +392,7 @@ button {
 
 .tab-content {
   display: none;
-  padding: 30px;
+  padding: 20px;
   background-color: var(--white);
   border: 1px solid var(--border);
   border-radius: 0 6px 6px 6px;
@@ -396,13 +436,13 @@ button {
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 20px;
 }
 
 .card {
   border: 2px solid var(--accent);
   border-radius: 8px;
-  padding: 25px;
+  padding: 20px;
   background: linear-gradient(180deg, var(--bg-light), var(--white));
 }
 
@@ -440,7 +480,7 @@ button {
    ===================================================== */
 .table {
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 .table tr {
@@ -449,7 +489,7 @@ button {
 
 .table th {
   width: 200px;
-  padding: 20px 15px;
+  padding: 12px 15px;
   font-weight: 600;
   background-color: var(--bg-light);
   text-align: left;
@@ -457,7 +497,7 @@ button {
 }
 
 .table td {
-  padding: 20px 15px;
+  padding: 12px 15px;
 }
 
 /* =====================================================
@@ -481,7 +521,7 @@ button {
    Works / Business Sections
    ===================================================== */
 .work-section {
-  padding: 60px 0;
+  padding: 40px 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -492,7 +532,7 @@ button {
 .work-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
 }
 
@@ -531,7 +571,7 @@ button {
    Business Categories (事業内容)
    ===================================================== */
 .business-categories {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .category-list {
@@ -551,8 +591,8 @@ button {
 .work-description {
   text-align: center;
   font-size: 16px;
-  line-height: 1.8;
-  margin-bottom: 30px;
+  line-height: 1.6;
+  margin-bottom: 20px;
   color: var(--text);
 }
 
@@ -566,23 +606,12 @@ button {
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.work-gallery-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .work-gallery-item img {
   width: 100%;
   height: auto;
   display: block;
-  transition: transform 0.3s ease;
-}
-
-.work-gallery-item:hover img {
-  transform: scale(1.05);
 }
 
 .gallery-caption {
@@ -627,14 +656,13 @@ button {
 .gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 30px;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .gallery-item {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #f8f9fa;
   aspect-ratio: 4 / 3;
   overflow: hidden;
@@ -643,21 +671,11 @@ button {
   justify-content: center;
 }
 
-.gallery-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
 .gallery-item img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-.gallery-item:hover img {
-  transform: scale(1.02);
 }
 
 /* =====================================================
@@ -665,8 +683,8 @@ button {
    ===================================================== */
 .form-intro {
   text-align: center;
-  margin-bottom: 40px;
-  line-height: 1.8;
+  margin-bottom: 25px;
+  line-height: 1.6;
 }
 
 .form-intro .required-note {
@@ -680,7 +698,7 @@ button {
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
@@ -746,7 +764,7 @@ button {
   font-size: 16px;
   font-weight: 600;
   color: var(--white);
-  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  background: rgb(74, 179, 210);
   border-radius: 4px;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -771,8 +789,8 @@ button {
 .solution-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 30px;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .solution-item {
@@ -790,7 +808,7 @@ button {
 
 .solution-item a {
   display: block;
-  padding: 30px 20px;
+  padding: 20px 15px;
   text-align: center;
   color: var(--text);
 }
@@ -812,7 +830,7 @@ button {
 
 .solution-more {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 25px;
 }
 
 /* =====================================================
@@ -821,9 +839,9 @@ button {
 .business-content {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .business-image {
@@ -844,9 +862,9 @@ button {
 
 .business-text p {
   font-size: 16px;
-  line-height: 2;
+  line-height: 1.7;
   color: var(--text);
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .business-text p:last-child {
@@ -859,7 +877,7 @@ button {
 .footer {
   background-color: var(--primary);
   color: var(--white);
-  padding: 50px 0;
+  padding: 35px 0;
   text-align: center;
 }
 
@@ -930,7 +948,7 @@ button {
    ===================================================== */
 .company-intro {
   text-align: center;
-  padding: 60px 0;
+  padding: 40px 0;
 }
 
 .company-intro h3 {
@@ -942,8 +960,8 @@ button {
 
 .company-intro p {
   font-size: 16px;
-  line-height: 2;
-  margin-bottom: 15px;
+  line-height: 1.7;
+  margin-bottom: 12px;
 }
 
 .company-intro .btn-link {
@@ -978,8 +996,8 @@ button {
   font-size: 18px;
   font-weight: 600;
   color: var(--primary-dark);
-  margin-top: 30px;
-  margin-bottom: 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   padding-left: 15px;
   border-left: 4px solid var(--primary);
 }
@@ -1008,10 +1026,10 @@ button {
    ===================================================== */
 .contact-info {
   text-align: center;
-  padding: 40px;
+  padding: 25px;
   background-color: var(--bg-light);
   border-radius: 8px;
-  margin-top: 40px;
+  margin-top: 25px;
 }
 
 .contact-info h3 {
@@ -1099,19 +1117,19 @@ button {
   .page-header {
     height: 150px;
   }
-  
+
   .page-header h1 {
     font-size: 24px;
   }
   
   /* Section */
   .section {
-    padding: 50px 0;
+    padding: 35px 0;
   }
-  
+
   .section-title {
-    font-size: 32px;
-    margin-bottom: 30px;
+    font-size: 28px;
+    margin-bottom: 15px;
   }
   
   /* Cards */
@@ -1233,9 +1251,9 @@ button {
 }
 
 .greeting-content p {
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
   text-align: justify;
-  line-height: 2;
+  line-height: 1.7;
 }
 
 .greeting-content p:last-child {
@@ -1252,7 +1270,7 @@ button {
    Main Banner Section
    ===================================================== */
 .main-banner-section {
-  padding: 40px 0;
+  padding: 25px 0;
   text-align: center;
 }
 
@@ -1277,7 +1295,7 @@ button {
    Banner Section (関連会社リンク)
    ===================================================== */
 .banner-section {
-  padding: 40px 0;
+  padding: 25px 0;
   background-color: var(--bg-light);
 }
 
@@ -1321,7 +1339,7 @@ button {
 .page-layout {
   display: grid;
   grid-template-columns: 1fr 250px;
-  gap: 40px;
+  gap: 30px;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 20px;
@@ -1332,7 +1350,7 @@ button {
 }
 
 .page-sidebar {
-  padding-top: 40px;
+  padding-top: 25px;
 }
 
 .sidebar-banner {
