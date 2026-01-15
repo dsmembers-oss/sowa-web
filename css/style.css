@@ -1357,6 +1357,10 @@ button {
   display: block;
 }
 
+.sidebar-banner a:hover {
+  opacity: 1;
+}
+
 
 .sidebar-banner img {
   width: 100%;
