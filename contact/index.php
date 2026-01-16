@@ -1,3 +1,72 @@
+<?php
+/**
+ * お問い合わせフォーム - 入力画面
+ *
+ * @package SowaPlantMailForm
+ * @version 1.0.0
+ */
+
+declare(strict_types=1);
+
+// 設定ファイル読み込み
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/security.php';
+
+// セキュリティヘッダー設定
+setSecurityHeaders();
+
+// セッション開始
+startSecureSession();
+
+// CSRFトークン生成
+$csrfToken = generateCsrfToken();
+
+// エラーメッセージ
+$errors = $_SESSION['form_errors'] ?? [];
+unset($_SESSION['form_errors']);
+
+// 保存されたフォームデータを取得
+$formData = getFormData();
+
+/**
+ * フィールドの値を取得（XSSエスケープ済み）
+ *
+ * @param string $field
+ * @return string
+ */
+function getFieldValue(string $field): string
+{
+    global $formData;
+    return escapeHtml($formData[$field] ?? '');
+}
+
+/**
+ * エラーメッセージを取得
+ *
+ * @param string $field
+ * @return string
+ */
+function getError(string $field): string
+{
+    global $errors;
+    if (isset($errors[$field])) {
+        return '<span class="error-message">' . escapeHtml($errors[$field]) . '</span>';
+    }
+    return '';
+}
+
+/**
+ * エラークラスを取得
+ *
+ * @param string $field
+ * @return string
+ */
+function getErrorClass(string $field): string
+{
+    global $errors;
+    return isset($errors[$field]) ? ' has-error' : '';
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -8,7 +77,51 @@
     <title>お問い合わせ | 株式会社相和プラント</title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* エラー表示用スタイル */
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px;
+            display: block;
+            margin-top: 5px;
+        }
+        .has-error input,
+        .has-error textarea {
+            border-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+        .error-summary {
+            background-color: #fff5f5;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        .error-summary h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .error-summary ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .error-summary li {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        /* ハニーポット（非表示） */
+        .hp-field {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            height: 0;
+            width: 0;
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,16 +132,16 @@
     <!-- Header -->
     <header class="header">
         <div class="header-inner">
-            <a href="index.html" class="logo">
-                <img src="images/logo.png" alt="相和プラント">
+            <a href="../index.html" class="logo">
+                <img src="../images/logo.png" alt="相和プラント">
             </a>
             <nav class="nav">
                 <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-home">HOME</a></li>
-                    <li><a href="works.html">事業内容</a></li>
-                    <li><a href="example.html">納入実績</a></li>
-                    <li><a href="company.html">会社概要</a></li>
-                    <li><a href="contact.html" class="current">お問い合わせ</a></li>
+                    <li><a href="../index.html" class="nav-home">HOME</a></li>
+                    <li><a href="../works.html">事業内容</a></li>
+                    <li><a href="../example.html">納入実績</a></li>
+                    <li><a href="../company.html">会社概要</a></li>
+                    <li><a href="index.php" class="current">お問い合わせ</a></li>
                 </ul>
             </nav>
             <button class="menu-btn"><span></span></button>
@@ -48,73 +161,114 @@
             <div class="container">
                 <h3 class="heading">お問い合わせフォーム</h3>
                 <p class="form-intro">
-                    以下のフォームに入力のうえ、[送信]ボタンをクリックしてください。<br>
+                    以下のフォームに入力のうえ、[確認画面へ]ボタンをクリックしてください。<br>
                     <span class="required-note">*は必須項目です。必ずご入力ください。</span><br>
                     （株）、（有）や丸囲み数字等の機種依存文字は、<br>
                     文字化けの原因となりますので使用しないようお願い致します。
                 </p>
 
-                <form class="form" action="#" method="post">
+                <?php if (!empty($errors)): ?>
+                <div class="error-summary">
+                    <h4>入力内容にエラーがあります</h4>
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                        <li><?php echo escapeHtml($error); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
 
-                    <div class="form-group">
+                <form class="form" action="confirm.php" method="post" novalidate>
+                    <!-- CSRF トークン -->
+                    <input type="hidden" name="csrf_token" value="<?php echo escapeHtml($csrfToken); ?>">
+
+                    <!-- ハニーポット（スパム対策） -->
+                    <div class="hp-field" aria-hidden="true">
+                        <label for="website">Website</label>
+                        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <div class="form-group<?php echo getErrorClass('email'); ?>">
                         <label for="email">メールアドレス <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" placeholder="例：info@example.com" required>
+                        <input type="email" id="email" name="email" placeholder="例：info@example.com"
+                            value="<?php echo getFieldValue('email'); ?>" required>
+                        <?php echo getError('email'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('email_confirm'); ?>">
                         <label for="email_confirm">確認用メールアドレス <span class="required">*</span></label>
-                        <input type="email" id="email_confirm" name="email_confirm" placeholder="確認のため再度入力してください" required>
+                        <input type="email" id="email_confirm" name="email_confirm" placeholder="確認のため再度入力してください"
+                            value="<?php echo getFieldValue('email_confirm'); ?>" required>
+                        <?php echo getError('email_confirm'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('name'); ?>">
                         <label for="name">お名前 <span class="required">*</span></label>
-                        <input type="text" id="name" name="name" placeholder="例：山田 太郎" required>
+                        <input type="text" id="name" name="name" placeholder="例：山田 太郎"
+                            value="<?php echo getFieldValue('name'); ?>" required>
+                        <?php echo getError('name'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('company'); ?>">
                         <label for="company">法人名 <span class="required">*</span></label>
-                        <input type="text" id="company" name="company" placeholder="例：株式会社○○" required>
+                        <input type="text" id="company" name="company" placeholder="例：株式会社○○"
+                            value="<?php echo getFieldValue('company'); ?>" required>
+                        <?php echo getError('company'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('department'); ?>">
                         <label for="department">部署名</label>
-                        <input type="text" id="department" name="department" placeholder="例：営業部">
+                        <input type="text" id="department" name="department" placeholder="例：営業部"
+                            value="<?php echo getFieldValue('department'); ?>">
+                        <?php echo getError('department'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('job_title'); ?>">
                         <label for="job_title">役職名</label>
-                        <input type="text" id="job_title" name="job_title" placeholder="例：部長">
+                        <input type="text" id="job_title" name="job_title" placeholder="例：部長"
+                            value="<?php echo getFieldValue('job_title'); ?>">
+                        <?php echo getError('job_title'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('postcode'); ?>">
                         <label for="postcode">郵便番号</label>
-                        <input type="text" id="postcode" name="postcode" placeholder="例：457-0863">
+                        <input type="text" id="postcode" name="postcode" placeholder="例：457-0863"
+                            value="<?php echo getFieldValue('postcode'); ?>">
+                        <?php echo getError('postcode'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('address'); ?>">
                         <label for="address">住所</label>
-                        <textarea id="address" name="address" rows="3" placeholder="例：愛知県名古屋市南区豊2-33-1"></textarea>
+                        <textarea id="address" name="address" rows="3"
+                            placeholder="例：愛知県名古屋市南区豊2-33-1"><?php echo getFieldValue('address'); ?></textarea>
+                        <?php echo getError('address'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('tel'); ?>">
                         <label for="tel">電話番号</label>
-                        <input type="tel" id="tel" name="tel" placeholder="例：052-691-7536">
+                        <input type="tel" id="tel" name="tel" placeholder="例：052-691-7536"
+                            value="<?php echo getFieldValue('tel'); ?>">
+                        <?php echo getError('tel'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('fax'); ?>">
                         <label for="fax">FAX番号</label>
-                        <input type="tel" id="fax" name="fax" placeholder="例：052-691-7930">
+                        <input type="tel" id="fax" name="fax" placeholder="例：052-691-7930"
+                            value="<?php echo getFieldValue('fax'); ?>">
+                        <?php echo getError('fax'); ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group<?php echo getErrorClass('message'); ?>">
                         <label for="message">お問い合わせ内容 <span class="required">*</span></label>
-                        <textarea id="message" name="message" rows="6" placeholder="お問い合わせ内容をご記入ください" required></textarea>
+                        <textarea id="message" name="message" rows="6"
+                            placeholder="お問い合わせ内容をご記入ください" required><?php echo getFieldValue('message'); ?></textarea>
+                        <?php echo getError('message'); ?>
                     </div>
 
                     <p class="form-note" style="color: #e74c3c;">*は必須項目です。</p>
 
                     <div class="form-submit">
-                        <button type="submit">送信</button>
+                        <button type="submit">確認画面へ</button>
                         <button type="reset" class="btn-reset">リセット</button>
                     </div>
 
@@ -186,13 +340,13 @@
         <div class="container">
             <div class="banner-links">
                 <a href="http://wa-ltd.com/" target="_blank" rel="noopener noreferrer">
-                    <img src="images/banners/bn07.gif" alt="関連会社">
+                    <img src="../images/banners/bn07.gif" alt="関連会社">
                 </a>
                 <a href="https://www.2.solars.jp/" target="_blank" rel="noopener noreferrer">
-                    <img src="images/banners/bn08.gif" alt="関連会社">
+                    <img src="../images/banners/bn08.gif" alt="関連会社">
                 </a>
                 <a href="https://www.2.solars.jp/" target="_blank" rel="noopener noreferrer">
-                    <img src="images/banners/img122ea5826_1.png" alt="関連会社">
+                    <img src="../images/banners/img122ea5826_1.png" alt="関連会社">
                 </a>
             </div>
         </div>
@@ -206,7 +360,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <a href="contact.html" class="btn">お問い合わせ</a>
+            <a href="index.php" class="btn">お問い合わせ</a>
             <p class="tel">
                 <a href="tel:052-691-7536">TEL：052-691-7536</a>
             </p>
@@ -219,7 +373,7 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 
 </html>
