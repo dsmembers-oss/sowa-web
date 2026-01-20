@@ -246,15 +246,18 @@ button {
   font-weight: 700;
   color: var(--white);
   text-shadow:
-    1px 1px 0 #000000,
-    1px 1px 0 #000000;
+    4px 4px 0 rgba(0, 0, 0, 1),
+    1px 1px 0 rgba(0, 0, 0, 1),
+    -1px -1px 0 rgba(0, 0, 0, 0.8);
   line-height: 1.5;
 }
 
 .hero h1 {
   font-size: 40px;
   font-weight: 700;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.8),
+    0px 0px 10px rgba(0, 0, 0, 0.4);
   line-height: 1.5;
 }
 
@@ -1122,11 +1125,16 @@ button {
 .equipment-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px 30px;
+  gap: 0 30px;
+  align-items: start;
 }
 
 .equipment-grid .table {
   margin-bottom: 0;
+}
+
+.equipment-grid .table tr {
+  height: 48px;
 }
 
 .equipment-grid .table tr:last-child {
@@ -1137,10 +1145,12 @@ button {
 .equipment-grid .table td {
   display: table-cell;
   width: auto;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .equipment-grid .table th {
-  width: 160px;
+  width: 180px;
   padding: 10px 15px;
 }
 
@@ -1246,16 +1256,24 @@ button {
 
   /* Hero */
   .hero {
-    height: 300px;
+    height: 400px;
+  }
+
+  .hero-image {
+    object-position: left center;
   }
 
   .hero-text {
-    bottom: 100px;
-    font-size: 26px;
+    bottom: 20px;
+    font-size: 28px;
+    text-shadow:
+      2px 2px 2px rgba(0, 0, 0, 1),
+      1px 1px 0 rgba(0, 0, 0, 1),
+      -1px -1px 0 rgba(0, 0, 0, 0.8);
   }
 
   .hero h1 {
-    font-size: 26px;
+    font-size: 28px;
     padding: 0 20px;
   }
 
@@ -1267,12 +1285,27 @@ button {
   .news-header {
     padding: 12px 25px;
     font-size: 16px;
-    top: -56px;
-    margin-bottom: -56px;
+    top: 0;
+    margin-bottom: 0;
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    border-radius: 0;
   }
 
   .news-content {
     padding: 15px 20px;
+  }
+
+  .news th {
+    display: block;
+    width: 100%;
+    padding: 15px 10px 5px;
+  }
+
+  .news td {
+    display: block;
+    padding: 0 10px 15px;
   }
 
   .page-header {
@@ -1426,6 +1459,15 @@ button {
   /* Equipment 2column SP */
   .equipment-grid {
     grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .equipment-grid .table {
+    border-collapse: collapse;
+  }
+
+  .equipment-grid .table:first-child tr:last-child {
+    border-bottom: 1px solid var(--border);
   }
 }
 
